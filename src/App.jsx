@@ -6,12 +6,26 @@ import * as sfx from './sound.js'
 import Warp from './Warp.jsx'
 import Roses from './Roses.jsx'
 import Confetti from './Confetti.jsx'
+import Countdown from './Countdown.jsx'
+import { BIRTHDAY } from './config.js'
+import { useServerClock } from './useServerClock.js'
 
 const TAPS_TO_EXPLODE = 6
 
 export default function App() {
-  // fases: cards -> messages -> cake -> boom
-  const [phase, setPhase] = useState('cards')
+  // fases: boot -> countdown -> welcome -> cards -> messages -> cake -> boom
+  const [phase, setPhase] = useState('boot')
+  const [live, setLive] = useState(false) // true si la cuenta llegó a cero estando la página abierta
+  const clock = useServerClock()
+
+  useEffect(() => {
+    if (clock && phase === 'boot') {
+      setPhase(clock.now() >= Date.parse(BIRTHDAY) ? 'welcome' : 'countdown')
+    }
+  }, [clock, phase])
+
+  const onZero = useCallback(() => { setLive(true); setPhase('welcome') }, [])
+
   const [picked, setPicked] = useState(null)
   const [leaving, setLeaving] = useState(false)
   const [step, setStep] = useState(0)
@@ -65,6 +79,17 @@ export default function App() {
       <MuteButton />
       <FloatingHearts />
 
+      {phase === 'countdown' && <Countdown clock={clock} onDone={onZero} />}
+
+      {phase === 'welcome' && (
+        <>
+          {live && <Confetti />}
+          <WelcomeScene
+            onOpen={() => { sfx.pop(); setPhase('cards') }}
+          />
+        </>
+      )}
+
       {phase === 'cards' && (
         <CardsScene picked={picked} leaving={leaving} onPick={pickCard} />
       )}
@@ -103,6 +128,27 @@ function MuteButton() {
     >
       {m ? '🔇' : '🔊'}
     </button>
+  )
+}
+
+/* ---------------- Bienvenida ---------------- */
+
+function WelcomeScene({ onOpen }) {
+  return (
+    <div className="message-scene welcome">
+      <div className="msg-box">
+        <span className="msg-heart top">♥</span>
+        <h2>¡Bienvenida, Gaby!</h2>
+        <p>
+          Bienvenida al cumpleaños más especial que vas a vivir en tu vida. 💖
+          <br /><br />
+          Este es tu primer regalo.
+        </p>
+        <div className="msg-footer welcome-footer">
+          <button className="next-btn" onClick={onOpen}>Abrir mi regalo 🎁</button>
+        </div>
+      </div>
+    </div>
   )
 }
 
