@@ -237,14 +237,28 @@ button { font: inherit; border: 0; background: none; padding: 0; cursor: pointer
 .polaroid figcaption { font-family: var(--font-title); font-style: italic; margin-top: 6px; font-size: 1.05rem; }
 @keyframes polaroidIn { from { opacity: 0; transform: translateY(60px) rotate(12deg) scale(.6); } to { opacity: 1; transform: none; } }
 
-/* ---------- Foto de fondo (public/foto.jpg) ---------- */
-.photo-bg {
-  position: fixed; inset: 0; z-index: 1;
-  background-size: cover; background-position: center;
-  animation: photoIn 2.5s .8s ease-out both;
+/* ---------- Viaje intergaláctico ---------- */
+.warp { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+/* El mensaje "llega" desde lejos: borroso y pequeño, y se asienta suavemente */
+.msg-box {
+  animation: arrive 1.3s .45s cubic-bezier(.16, 1, .3, 1) both;
 }
-.photo-bg::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(42,10,28,.75) 0%, rgba(42,10,28,.25) 45%, rgba(42,10,28,.7) 100%);
+@keyframes arrive {
+  0%   { opacity: 0; transform: scale(.25) translateZ(0); filter: blur(18px); }
+  35%  { opacity: 1; }
+  100% { opacity: 1; transform: none; filter: blur(0); }
 }
-@keyframes photoIn { from { opacity: 0; transform: scale(1.12); } to { opacity: 1; transform: none; } }
+.message-scene .tap-hint { animation: textIn 1s 1.2s both; }
+.cake-scene { animation: arrive 1.4s .5s cubic-bezier(.16, 1, .3, 1) both; }
+
+/* ---------- Foto final ---------- */
+.photo-final { position: fixed; inset: 0; z-index: 1; display: grid; place-items: center; animation: photoIn 2s ease-out both; }
+.photo-blur { position: absolute; inset: -30px; background-size: cover; background-position: center; filter: blur(28px) brightness(.7); }
+.photo-final img {
+  position: relative; max-width: 100%; max-height: 100%; object-fit: contain;
+  box-shadow: 0 0 60px rgba(255, 77, 141, .45);
+}
+@keyframes photoIn { from { opacity: 0; transform: scale(1.1); filter: blur(10px); } to { opacity: 1; transform: none; filter: blur(0); } }
+.boom-text.gone { animation: fadeOut 1s forwards; pointer-events: none; }
+.confetti { z-index: 5; }
