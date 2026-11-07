@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { messages } from './messages.js'
 import Cake from './Cake.jsx'
 import FloatingHearts from './FloatingHearts.jsx'
+import * as sfx from './sound.js'
 
 const TAPS_TO_EXPLODE = 6
 
@@ -16,12 +17,14 @@ export default function App() {
   const pickCard = (i) => {
     if (picked !== null) return
     setPicked(i)
+    sfx.flip()
     // voltea la carta, luego las cartas se van
-    setTimeout(() => setLeaving(true), 1300)
+    setTimeout(() => { setLeaving(true); sfx.whoosh() }, 1300)
     setTimeout(() => setPhase('messages'), 2100)
   }
 
   const next = useCallback(() => {
+    sfx.pop()
     setStep((s) => {
       if (s >= messages.length - 1) {
         setPhase('cake')
@@ -44,8 +47,10 @@ export default function App() {
   return (
     <div
       className="stage"
+      onPointerDown={sfx.unlock}
       onClick={phase === 'messages' ? next : undefined}
     >
+      <MuteButton />
       <FloatingHearts />
 
       {phase === 'cards' && (
@@ -60,12 +65,30 @@ export default function App() {
           taps={taps}
           onTap={() => {
             const t = taps + 1
+            sfx.tick(t)
             setTaps(t)
             if (t >= TAPS_TO_EXPLODE) setPhase('boom')
           }}
         />
       )}
     </div>
+  )
+}
+
+function MuteButton() {
+  const [m, setM] = useState(sfx.isMuted())
+  return (
+    <button
+      className="mute"
+      aria-label={m ? 'Activar sonido' : 'Silenciar'}
+      onClick={(e) => {
+        e.stopPropagation()
+        sfx.setMuted(!m)
+        setM(!m)
+      }}
+    >
+      {m ? '🔇' : '🔊'}
+    </button>
   )
 }
 
@@ -165,6 +188,7 @@ function CakeScene({ phase, taps, onTap }) {
 }
 
 function Boom() {
+  useEffect(() => { sfx.boom() }, [])
   return (
     <>
       <Confetti />
@@ -172,6 +196,10 @@ function Boom() {
         <div className="flash" />
         <h1>¡Feliz cumpleaños,<br />mi reina!</h1>
         <p>Gaby, te quiero con todo mi corazón. 💖👑</p>
+        <figure className="polaroid">
+          <img src={`${import.meta.env.BASE_URL}gaby.svg`} alt="Para Gaby, mi reina" />
+          <figcaption>Para ti, mi reina 👑</figcaption>
+        </figure>
       </div>
     </>
   )
