@@ -1,6 +1,7 @@
 // Efectos de sonido sintetizados con Web Audio (sin archivos externos).
 let ctx = null
 let master = null
+let noiseBuf = null
 let muted = false
 try { muted = localStorage.getItem('muted') === '1' } catch { /* sin storage */ }
 
@@ -43,10 +44,12 @@ function tone({ freq, to, dur = 0.2, type = 'sine', vol = 0.3, at = 0, attack = 
 function noise({ dur = 0.4, vol = 0.3, at = 0, from = 4000, to = 300, q = 1 }) {
   const c = ac(); if (!c) return
   const t = c.currentTime + at
-  const buf = c.createBuffer(1, Math.max(1, (c.sampleRate * dur) | 0), c.sampleRate)
-  const d = buf.getChannelData(0)
-  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1
-  const s = c.createBufferSource(); s.buffer = buf
+  if (!noiseBuf) {
+    noiseBuf = c.createBuffer(1, c.sampleRate * 2, c.sampleRate)
+    const d = noiseBuf.getChannelData(0)
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1
+  }
+  const s = c.createBufferSource(); s.buffer = noiseBuf
   const f = c.createBiquadFilter(); f.type = 'bandpass'; f.Q.value = q
   f.frequency.setValueAtTime(from, t)
   f.frequency.exponentialRampToValueAtTime(to, t + dur)
@@ -54,7 +57,7 @@ function noise({ dur = 0.4, vol = 0.3, at = 0, from = 4000, to = 300, q = 1 }) {
   g.gain.setValueAtTime(vol, t)
   g.gain.exponentialRampToValueAtTime(0.0001, t + dur)
   s.connect(f).connect(g).connect(master)
-  s.start(t)
+  s.start(t, Math.random() * 0.8)
 }
 
 // Carta que se voltea
