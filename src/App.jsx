@@ -4,6 +4,7 @@ import Cake from './Cake.jsx'
 import FloatingHearts from './FloatingHearts.jsx'
 import * as sfx from './sound.js'
 import Warp from './Warp.jsx'
+import Roses from './Roses.jsx'
 
 const TAPS_TO_EXPLODE = 6
 
@@ -196,6 +197,8 @@ function Boom() {
   useEffect(() => { sfx.boom() }, [])
   // Si existe public/foto.jpg se muestra al final; si no, la ilustración
   const [hasPhoto, setHasPhoto] = useState(false)
+  // línea de tiempo con foto: texto (5s) → texto se va (1s) → solo foto + rosas
+  const [textGone, setTextGone] = useState(false)
   const [showPhoto, setShowPhoto] = useState(false)
   const photo = `${import.meta.env.BASE_URL}foto.jpg`
   useEffect(() => {
@@ -205,8 +208,9 @@ function Boom() {
   }, [photo])
   useEffect(() => {
     if (!hasPhoto) return
-    const t = setTimeout(() => setShowPhoto(true), 5000)
-    return () => clearTimeout(t)
+    const t1 = setTimeout(() => setTextGone(true), 5000)
+    const t2 = setTimeout(() => setShowPhoto(true), 6200)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [hasPhoto])
   return (
     <>
@@ -216,8 +220,14 @@ function Boom() {
           <img src={photo} alt="Feliz cumpleaños, mi Gaby" />
         </div>
       )}
-      <Confetti />
-      <div className={`boom-text ${showPhoto ? 'gone' : ''}`}>
+      {showPhoto && <Roses />}
+      {!showPhoto && (
+        <div className={`confetti-wrap ${textGone ? 'fade' : ''}`}>
+          <Confetti />
+        </div>
+      )}
+      {!showPhoto && (
+      <div className={`boom-text ${textGone ? 'gone' : ''}`}>
         <div className="flash" />
         <h1>¡Feliz cumpleaños,<br />mi reina!</h1>
         <p>Gaby, te quiero con todo mi corazón. 💖👑</p>
@@ -228,6 +238,7 @@ function Boom() {
           </figure>
         )}
       </div>
+      )}
     </>
   )
 }
