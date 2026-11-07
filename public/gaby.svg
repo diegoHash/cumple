@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="bg" cx=".5" cy=".4" r=".8"><stop offset="0" stop-color="#ffd1e3"/><stop offset="1" stop-color="#ff6fa3"/></radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff2a8"/><stop offset="1" stop-color="#f4a300"/></linearGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a2a1a"/><stop offset="1" stop-color="#2e130b"/></linearGradient>
+    <path id="h" d="M0 8 C0 -6 -18 -6 -18 6 C-18 18 0 26 0 34 C0 26 18 18 18 6 C18 -6 0 -6 0 8z"/>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <g fill="#fff" opacity=".55">
+    <use href="#h" transform="translate(50 60) scale(.9)"/><use href="#h" transform="translate(340 90) scale(1.2)"/>
+    <use href="#h" transform="translate(70 300) scale(1.3)"/><use href="#h" transform="translate(335 320) scale(.8)"/>
+    <use href="#h" transform="translate(200 40) scale(.6)"/><use href="#h" transform="translate(370 210) scale(.6)"/>
+    <use href="#h" transform="translate(30 190) scale(.7)"/>
+  </g>
+  <!-- cabello -->
+  <path d="M110 250 C90 130 140 90 200 90 C260 90 310 130 290 250 C300 300 280 340 260 360 L140 360 C120 340 100 300 110 250z" fill="url(#hair)"/>
+  <!-- cuello y vestido -->
+  <rect x="180" y="250" width="40" height="40" fill="#ffd9c2"/>
+  <path d="M95 400 C100 320 160 290 200 290 C240 290 300 320 305 400z" fill="#e0245e"/>
+  <path d="M170 292 C185 318 215 318 230 292" fill="#ffd9c2"/>
+  <!-- cara -->
+  <ellipse cx="200" cy="210" rx="72" ry="82" fill="#ffd9c2"/>
+  <path d="M130 190 C150 130 250 130 270 190 C240 160 160 160 130 190z" fill="url(#hair)"/>
+  <ellipse cx="172" cy="215" rx="7" ry="9" fill="#2e130b"/><ellipse cx="228" cy="215" rx="7" ry="9" fill="#2e130b"/>
+  <circle cx="175" cy="211" r="2.5" fill="#fff"/><circle cx="231" cy="211" r="2.5" fill="#fff"/>
+  <path d="M160 200 q12-10 25-2 M215 198 q12-8 25 2" stroke="#2e130b" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <ellipse cx="150" cy="238" rx="14" ry="9" fill="#ff8fb8" opacity=".6"/><ellipse cx="250" cy="238" rx="14" ry="9" fill="#ff8fb8" opacity=".6"/>
+  <path d="M172 250 Q200 280 228 250 Q200 262 172 250z" fill="#e0245e"/>
+  <!-- corona -->
+  <path d="M135 130 L150 70 L178 108 L200 58 L222 108 L250 70 L265 130z" fill="url(#gold)" stroke="#c98200" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="135" y="126" width="130" height="14" rx="5" fill="url(#gold)" stroke="#c98200" stroke-width="3"/>
+  <circle cx="200" cy="58" r="7" fill="#e0245e"/><circle cx="150" cy="70" r="6" fill="#ff8fb8"/><circle cx="250" cy="70" r="6" fill="#ff8fb8"/>
+  <!-- corazón -->
+  <use href="#h" fill="#fff" transform="translate(200 332) scale(.7)"/>
+  <text x="200" y="385" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="#fff" stroke="#8d0f3e" stroke-width=".8">Gaby</text>
+</svg>
