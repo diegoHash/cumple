@@ -171,7 +171,7 @@ function Boom() {
       <div className="boom-text">
         <div className="flash" />
         <h1>¡Feliz cumpleaños,<br />mi reina!</h1>
-        <p>Gaby, te amo con todo mi corazón. 💖👑</p>
+        <p>Gaby, te quiero con todo mi corazón. 💖👑</p>
       </div>
     </>
   )

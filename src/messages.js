@@ -23,6 +23,6 @@ export const messages = [
     text: 'Te deseo todo lo hermoso del mundo: salud, alegría, sueños cumplidos y todo el amor que mereces… que es muchísimo.',
   },
   {
-    text: 'Te amo, Gaby. Hoy y todos los días. Y ahora… tengo una última sorpresa para ti. 🎂',
+    text: 'Te quiero, Gaby. Hoy y todos los días. Y ahora… tengo una última sorpresa para ti. 🎂',
   },
 ]
