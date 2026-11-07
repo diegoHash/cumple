@@ -3,6 +3,7 @@ import { messages } from './messages.js'
 import Cake from './Cake.jsx'
 import FloatingHearts from './FloatingHearts.jsx'
 import * as sfx from './sound.js'
+import Warp from './Warp.jsx'
 
 const TAPS_TO_EXPLODE = 6
 
@@ -13,6 +14,7 @@ export default function App() {
   const [leaving, setLeaving] = useState(false)
   const [step, setStep] = useState(0)
   const [taps, setTaps] = useState(0)
+  const [warp, setWarp] = useState(0)
 
   const pickCard = (i) => {
     if (picked !== null) return
@@ -20,11 +22,12 @@ export default function App() {
     sfx.flip()
     // voltea la carta, luego las cartas se van
     setTimeout(() => { setLeaving(true); sfx.whoosh() }, 1300)
-    setTimeout(() => setPhase('messages'), 2100)
+    setTimeout(() => { setPhase('messages'); setWarp((w) => w + 1) }, 2100)
   }
 
   const next = useCallback(() => {
     sfx.pop()
+    setWarp((w) => w + 1)
     setStep((s) => {
       if (s >= messages.length - 1) {
         setPhase('cake')
@@ -56,6 +59,8 @@ export default function App() {
       {phase === 'cards' && (
         <CardsScene picked={picked} leaving={leaving} onPick={pickCard} />
       )}
+
+      {(phase === 'messages' || phase === 'cake') && <Warp pulse={warp} />}
 
       {phase === 'messages' && <MessageScene step={step} />}
 
@@ -189,31 +194,38 @@ function CakeScene({ phase, taps, onTap }) {
 
 function Boom() {
   useEffect(() => { sfx.boom() }, [])
-  // Si existe public/foto.jpg se usa como fondo; si no, se muestra la ilustración
+  // Si existe public/foto.jpg se muestra al final; si no, la ilustración
   const [hasPhoto, setHasPhoto] = useState(false)
+  const [showPhoto, setShowPhoto] = useState(false)
+  const photo = `${import.meta.env.BASE_URL}foto.jpg`
   useEffect(() => {
     const img = new Image()
     img.onload = () => setHasPhoto(true)
-    img.src = `${import.meta.env.BASE_URL}foto.jpg`
-  }, [])
+    img.src = photo
+  }, [photo])
+  useEffect(() => {
+    if (!hasPhoto) return
+    const t = setTimeout(() => setShowPhoto(true), 5000)
+    return () => clearTimeout(t)
+  }, [hasPhoto])
   return (
     <>
-      {hasPhoto && (
-        <div
-          className="photo-bg"
-          style={{ backgroundImage: `url(${import.meta.env.BASE_URL}foto.jpg)` }}
-        />
+      {showPhoto && (
+        <div className="photo-final">
+          <div className="photo-blur" style={{ backgroundImage: `url(${photo})` }} />
+          <img src={photo} alt="Feliz cumpleaños, mi Gaby" />
+        </div>
       )}
       <Confetti />
-      <div className="boom-text">
+      <div className={`boom-text ${showPhoto ? 'gone' : ''}`}>
         <div className="flash" />
         <h1>¡Feliz cumpleaños,<br />mi reina!</h1>
         <p>Gaby, te quiero con todo mi corazón. 💖👑</p>
         {!hasPhoto && (
-        <figure className="polaroid">
-          <img src={`${import.meta.env.BASE_URL}gaby.svg`} alt="Para Gaby, mi reina" />
-          <figcaption>Para ti, mi reina 👑</figcaption>
-        </figure>
+          <figure className="polaroid">
+            <img src={`${import.meta.env.BASE_URL}gaby.svg`} alt="Para Gaby, mi reina" />
+            <figcaption>Para ti, mi reina 👑</figcaption>
+          </figure>
         )}
       </div>
     </>
