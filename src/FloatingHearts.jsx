@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
+import { LOW } from './perf.js'
 
 export default function FloatingHearts() {
   const hearts = useMemo(
     () =>
-      Array.from({ length: 22 }, (_, i) => ({
+      Array.from({ length: LOW ? 9 : 14 }, (_, i) => ({
         id: i,
         left: Math.random() * 100,
         size: 12 + Math.random() * 28,
