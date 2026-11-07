@@ -278,3 +278,20 @@ button { font: inherit; border: 0; background: none; padding: 0; cursor: pointer
 @keyframes fadeOnly { from { opacity: 0; } to { opacity: 1; } }
 .low .msg-box { box-shadow: 0 12px 28px rgba(0,0,0,.4); }
 .low .flash { animation-duration: .5s; }
+
+/* ---------- Cuenta regresiva y bienvenida ---------- */
+.countdown { position: relative; z-index: 1; text-align: center; display: grid; gap: clamp(18px, 4dvh, 34px); justify-items: center; width: 100%; }
+.cd-top { margin: 0; font-family: var(--font-title); font-style: italic; font-size: clamp(1.3rem, 5.5vw, 2rem); color: var(--pink-soft); padding: 0 8px; }
+.cd-digits { display: flex; gap: clamp(8px, 3vw, 18px); justify-content: center; }
+.cd-unit {
+  min-width: clamp(70px, 22vw, 110px); padding: 14px 6px 10px; border-radius: 20px;
+  background: linear-gradient(160deg, #ffe3ee, #ffc2da); color: var(--ink);
+  box-shadow: 0 14px 30px rgba(0,0,0,.4), 0 0 0 3px rgba(255,255,255,.5) inset;
+  display: grid; gap: 2px;
+}
+.cd-unit b { font-family: var(--font-title); font-size: clamp(2.2rem, 11vw, 3.6rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.cd-unit span { font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: #c2185b; }
+.cd-bottom { margin: 0; color: var(--pink-soft); opacity: .85; font-size: clamp(.95rem, 3.8vw, 1.15rem); }
+.cd-bottom small { opacity: .8; }
+.welcome .msg-box h2 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+.welcome-footer { justify-content: center; }
