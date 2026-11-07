@@ -189,17 +189,32 @@ function CakeScene({ phase, taps, onTap }) {
 
 function Boom() {
   useEffect(() => { sfx.boom() }, [])
+  // Si existe public/foto.jpg se usa como fondo; si no, se muestra la ilustración
+  const [hasPhoto, setHasPhoto] = useState(false)
+  useEffect(() => {
+    const img = new Image()
+    img.onload = () => setHasPhoto(true)
+    img.src = `${import.meta.env.BASE_URL}foto.jpg`
+  }, [])
   return (
     <>
+      {hasPhoto && (
+        <div
+          className="photo-bg"
+          style={{ backgroundImage: `url(${import.meta.env.BASE_URL}foto.jpg)` }}
+        />
+      )}
       <Confetti />
       <div className="boom-text">
         <div className="flash" />
         <h1>¡Feliz cumpleaños,<br />mi reina!</h1>
         <p>Gaby, te quiero con todo mi corazón. 💖👑</p>
+        {!hasPhoto && (
         <figure className="polaroid">
           <img src={`${import.meta.env.BASE_URL}gaby.svg`} alt="Para Gaby, mi reina" />
           <figcaption>Para ti, mi reina 👑</figcaption>
         </figure>
+        )}
       </div>
     </>
   )
